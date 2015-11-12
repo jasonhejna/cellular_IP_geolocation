@@ -1,0 +1,24 @@
+{ address: '172.56.10.24',
+  country: 'US',
+  stateprov: 'Michigan',
+  city: 'Detroit',
+  dateNow: Tue Nov 10 2015 06:01:35 GMT+0000 (UTC),
+  deviceId: '0123456789' }
+{ address: '208.54.40.241',
+  country: 'US',
+  stateprov: 'Michigan',
+  city: 'Detroit',
+  dateNow: Tue Nov 10 2015 19:51:48 GMT+0000 (UTC),
+  deviceId: '0123456789' }
+{ address: '172.56.10.180',
+  country: 'US',
+  stateprov: 'Michigan',
+  city: 'Detroit',
+  dateNow: Tue Nov 10 2015 20:27:08 GMT+0000 (UTC),
+  deviceId: '0123456789' }
+{ address: '172.56.10.248',
+  country: 'US',
+  stateprov: 'Michigan',
+  city: 'Detroit',
+  dateNow: Thu Nov 12 2015 04:11:11 GMT+0000 (UTC),
+  deviceId: '0123456789' }

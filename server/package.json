@@ -1,0 +1,12 @@
+{
+  "name": "cellular",
+  "version": "0.0.0",
+  "description": "",
+  "main": "listen.js",
+  "dependencies": {
+        "ipware": "*",
+        "request": "*"
+  },
+  "author": "Jason Hejna",
+  "license": "BSD"
+}
