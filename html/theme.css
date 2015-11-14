@@ -16,3 +16,22 @@ body {
 .theme-showcase .navbar .container {
   width: auto;
 }
+
+@font-face {
+    font-family: "AudiTypeExtendedNormal";
+    font-style: normal;
+    font-weight: normal;
+    src: url("fonts/auditype-extendednormal-webfont.eot?iefix") format("eot"), url("fonts/auditype-extendednormal-webfont.woff") format("woff"), url("fonts/auditype-extendednormal-webfont.ttf") format("truetype"), url("fonts/auditype-extendednormal-webfont.svg#webfontauTKsTL1") format("svg");
+}
+@font-face {
+    font-family: "AudiTypeExtendedBold";
+    font-style: normal;
+    font-weight: normal;
+    src: url("fonts/auditype-extendedbold-webfont.eot?iefix") format("eot"), url("fonts/auditype-extendedbold-webfont.woff") format("woff"), url("fonts/auditype-extendedbold-webfont.ttf") format("truetype"), url("fonts/auditype-extendedbold-webfont.svg#webfontSGtR24PM") format("svg");
+}
+@font-face {
+    font-family: "AudiTypeNormal";
+    font-style: normal;
+    font-weight: normal;
+    src: url("fonts/auditype-normal-webfont.eot?iefix") format("eot"), url("fonts/auditype-normal-webfont.woff") format("woff"), url("fonts/auditype-normal-webfont.ttf") format("truetype"), url("fonts/auditype-normal-webfont.svg#webfontvlcd0Hwu") format("svg");
+}

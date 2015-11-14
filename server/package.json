@@ -6,7 +6,8 @@
   "dependencies": {
         "ipware": "*",
         "request": "*",
-        "node-geocoder":"*"
+        "node-geocoder":"*",
+        "mongodb":"*"
   },
   "author": "Jason Hejna",
   "license": "BSD"
