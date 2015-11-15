@@ -99,7 +99,7 @@ function geocoder(singleton){
         console.log('if true');
         callback(doc.latlng);
       }
-      else if(doc != "" || doc != null){
+      else if(doc != "" && doc != null){
         callback(false);
       }
     });
@@ -187,7 +187,7 @@ function saveSingleton(singleton) {
       if (doc != null){
         callback(true);
       }
-      else if (doc != "" || doc != null){
+      else if (doc != "" && doc != null){
         callback(false);
       }
     });
