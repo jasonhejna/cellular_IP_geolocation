@@ -21,6 +21,7 @@ MongoClient.connect(url, function(err, dbc) {
 
 const PORT=8080;
 
+
 function handleRequest(request, response){
   
   request.shouldKeepAlive = false;
@@ -57,98 +58,8 @@ function handleRequest(request, response){
   findAddress(singleton);
 }
 
-function checkGeocoderCache(singleton){
-
-  var findGeocode = function(db, callback) {
-     var cursor =db.collection('geocoderCache').find( { "qa": singleton.qs } );
-     cursor.each(function(err, doc) {
-        assert.equal(err, null);
-        if (doc != null) {
-           console.dir(doc);
-        } else {
-           callback();
-        }
-     });
-  };
-
-  findGeocode(db, function() {});
-}
-
-function geocoder(singleton){
-
-  //query findGeocoder
-  var findGeocode = function(db, callback) {
-    var findCheck = false;
-    var cursor = db.collection('geocoderCache').find( { "qs": 'Detroit,+Michigan,+United+States' } );//singleton.qs
-    cursor.each(function(err, doc) {
-       assert.equal(err, null);
-       if (doc != null) {
-          callback(doc.location);
-       }
-       findCheck = true;
-    });
-    if (findCheck == false) {
-      callback(false);
-    }
-  };
-
-  findGeocode(db, function(dbLocation) {
-    if (dbLocation == false) {
-
-      //ex address: 1600+Amphitheatre+Parkway,+Mountain+View,+CA
-      request('https://maps.googleapis.com/maps/api/geocode/json?address='+singleton.qs+'&key=AIzaSyDYwgKGdspSSeJXLfMms0nX43sPkUrxzc4', function (error, response, output) {
-        if (!error && response.statusCode == 200) {
-          var fullGeo = JSON.parse(response.body);
-          console.dir(fullGeo.results[0].geometry.location);
-          singleton.location = fullGeo.results[0].geometry.location;
-          //console.log(fullGeo.results[0].geometry.location);
-          saveGeocoderResult(singleton);
-        }
-      })
-    }
-    else{
-      singleton.location = dbLocation;
-    }
-
-    //THATS IT - we just completed building out singleton!!
-    //save into the tracking collection
-    
-  });
-}
-
-
-function saveGeocoderResult(singleton){
-
-  var insertDocument = function(db, callback) {
-    db.collection('geocoderCache').insertOne( {
-          "qs" : "Detroit,+Michigan,+United+States",
-          "city" : "Detroit",
-          "stateprov" : "Michigan",
-          "country" : "US",
-          "location" : {
-              "lat" : 42.3314269999999979,
-              "lng" : -83.0457538000000000
-          }
-    }, function(err, result) {
-      assert.equal(err, null);
-      console.log("Inserted a document into the geocoder collection.");
-      callback(result);
-    });
-  };
-
-  insertDocument(db, function() {});
-
-}
-
-function saveToLog(storeObj, deviceId, dateNow){
-
-  storeObj['dateNow'] = dateNow;
-  storeObj['deviceId'] = deviceId;
-  console.log(storeObj);
-}
-
 function findAddress(singleton){
-
+// get location from ip address geolocation api
   request('http://api.db-ip.com/addrinfo?addr='+singleton.ip+'&api_key=6a477de7814852443bf563215c2265cf035ee30e', function (error, response, output) {
     if (!error && response.statusCode == 200) {
       var apiObj = JSON.parse(output);
@@ -175,9 +86,160 @@ function findAddress(singleton){
   })
 }
 
+function geocoder(singleton){
+// check if we have the geocode in our db, if not get it from google api
+  //query findGeocoder
+  var findGeocode = function(db, callback) {
+    var cursor = db.collection('geocoderCache').find( { "qs": singleton.qs } ).limit(1);
+    cursor.each(function(err, doc) {
+      assert.equal(err, null);
+      console.log('findGeocode');
+      console.log(doc);
+      if (doc != null){
+        console.log('if true');
+        callback(doc.latlng);
+      }
+      else if(doc != "" || doc != null){
+        callback(false);
+      }
+    });
+  };
+
+  findGeocode(db, function(dbLocation) {
+    if (dbLocation == false) {
+
+      //ex address: 1600+Amphitheatre+Parkway,+Mountain+View,+CA
+      request('https://maps.googleapis.com/maps/api/geocode/json?address='+singleton.qs+'&key=AIzaSyDYwgKGdspSSeJXLfMms0nX43sPkUrxzc4', function (error, response, output) {
+        if (!error && response.statusCode == 200) {
+          var fullGeo = JSON.parse(response.body);
+          console.dir(fullGeo.results[0].geometry.location);
+          singleton.latlng = fullGeo.results[0].geometry.location;
+          //console.log(fullGeo.results[0].geometry.location);
+          saveGeocoderResult(singleton);
+
+        }
+        else{
+          console.log('google geocoder api error');
+        }
+
+        //THATS IT - we just completed building our singleton!!
+        console.log('saveSingleton');
+        console.dir(singleton);
+        saveSingleton(singleton);
+      })
+
+    }
+    else{
+      singleton.latlng = dbLocation;
+      //THATS IT - we just completed building out singleton!!
+      console.log('saveSingleton');
+      console.dir(singleton);
+      saveSingleton(singleton);
+    }
+
+  });
+}
+
+function saveGeocoderResult(singleton) {
+
+  var insertDocument = function(db, callback) {
+    db.collection('geocoderCache').insertOne( singleton, function(err, result) {
+      assert.equal(err, null);
+      console.log("Inserted a document into the geocoder collection.");
+      callback(result);
+    });
+  };
+
+  insertDocument(db, function() {
+
+  });
+
+}
+
+//function checkGeocoderCache(singleton){
+//
+//  var findGeocode = function(db, callback) {
+//     var cursor =db.collection('geocoderCache').find( { "qs": singleton.qs } );
+//     cursor.each(function(err, doc) {
+//        assert.equal(err, null);
+//        if (doc != null) {
+//           console.dir(doc);
+//        }
+//        else {
+//           callback();
+//        }
+//     });
+//  };
+//
+//  findGeocode(db, function() {});
+//}
+
+function saveSingleton(singleton) {
+  console.log('saveSingleton:');
+  console.dir(singleton);
+// Save into the tracking collection, trigger alert over socket
+
+  // check if deviceId exists, if not then create a new document, else add location to existing doc
+  var findGeocode = function(db, callback) {
+    var cursor =db.collection('tracking').find( { "deviceId": singleton.deviceId } ).limit(1);
+    cursor.each(function(err, doc) {
+      assert.equal(err, null);
+      if (doc != null){
+        callback(true);
+      }
+      else if (doc != "" || doc != null){
+        callback(false);
+      }
+    });
+  };
+
+  findGeocode(db, function(found) {
+
+    var newLocObj = { "deviceId": singleton.deviceId,
+                      "locs": [
+                        {
+                          "datetime": singleton.datetime,
+                          "ip": singleton.ip,
+                          "city": singleton.city,
+                          "latlng": singleton.latlng,
+                          "stateprov": singleton.stateprov,
+                          "country": singleton.country,
+                          "qs": singleton.qs
+                        }
+                      ]
+                    };
+
+    if (found == false) {
+    //first time a device hits the api
+
+      var insertDocument = function(db, callback) {
+        db.collection('tracking').insertOne( newLocObj, function(err, result) {
+          assert.equal(err, null);
+          console.log("Inserted a document into the tracking collection.");
+          callback();
+        });
+      };
+
+      insertDocument(db, function() {
+        //socket
+        console.log('socket goes here');
+      });
+    }
+    else{ //add new location to existing document->locs array
+      db.collection('tracking').update(
+        { "deviceId": singleton.deviceId },
+        { $push: { locs: newLocObj.locs[0] } }
+      )
+    }
+  });
+}
+
+
 //TEST HERE!
+//var singleton = {};
+//singleton.qs = "Detroit,+United+States";
 //geocoder('Kalamazoo', 'Michigan', 'United States');
-setTimeout(function(){geocoder();}, 3000);
+//setTimeout(function(){geocoder(singleton);}, 3000);
 //setTimeout(function(){ saveGeocoderResult(); }, 3000);
 
 
@@ -194,6 +256,7 @@ process.stdin.resume();//so the program will not close instantly
 
 
 function exitHandler(options, err) {
+//close connection to mongodb
     db.close();
     if (options.cleanup) console.log('clean exit');
     if (err) console.log(err.stack);
