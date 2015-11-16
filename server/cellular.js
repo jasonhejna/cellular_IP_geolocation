@@ -86,26 +86,66 @@ function findAddress(singleton){
   })
 }
 
-function geocoder(singleton){
+function geocodertest(singleton){
 // check if we have the geocode in our db, if not get it from google api
+
+
   //query findGeocoder
   var findGeocode = function(db, callback) {
+    var i = 0;
+    var check = false;
     var cursor = db.collection('geocoderCache').find( { "qs": singleton.qs } ).limit(1);
     cursor.each(function(err, doc) {
       assert.equal(err, null);
-      console.log('findGeocode');
-      console.log(doc);
-      if (doc != null){
-        console.log('if true');
+      if (i == 0 && doc != null) {
+        check = true;
         callback(doc.latlng);
       }
-      else if(doc != "" && doc != null){
+      if (i == 1 && check == false) {
         callback(false);
       }
+      console.log('geocoder1:',i);
+      console.log(doc);
+      i++;
     });
   };
 
   findGeocode(db, function(dbLocation) {
+    console.log('findGeocode');
+    console.log(dbLocation);
+  });
+}
+
+function geocoder(singleton){
+// check if we have the geocode in our db, if not get it from google api
+
+  //query findGeocoder
+  var findGeocode = function(db, callback) {
+    var i = 0;
+    var check = false;
+    var cursor = db.collection('geocoderCache').find( { "qs": singleton.qs } ).limit(1);
+    cursor.each(function(err, doc) {
+      assert.equal(err, null);
+      if (i == 0 && doc == null){
+        callback(false);
+      }
+      if (i == 0 && doc != null) {
+        check = true;
+        callback(doc.latlng);
+      }
+      if (i == 1 && check == false) {
+        callback(false);
+      }
+      console.log('geocoder1:',i);
+      console.log(doc);
+      i++;
+    });
+  };
+
+  findGeocode(db, function(dbLocation) {
+    console.log('findGeocode');
+    console.log(dbLocation);
+
     if (dbLocation == false) {
 
       //ex address: 1600+Amphitheatre+Parkway,+Mountain+View,+CA
@@ -180,20 +220,31 @@ function saveSingleton(singleton) {
 // Save into the tracking collection, trigger alert over socket
 
   // check if deviceId exists, if not then create a new document, else add location to existing doc
-  var findGeocode = function(db, callback) {
+  var findTracking = function(db, callback) {
+    var i = 0;
+    var check = false;
     var cursor =db.collection('tracking').find( { "deviceId": singleton.deviceId } ).limit(1);
     cursor.each(function(err, doc) {
       assert.equal(err, null);
-      if (doc != null){
-        callback(true);
-      }
-      else if (doc != "" && doc != null){
+      if (i == 0 && doc == null){
         callback(false);
       }
+      if (i == 0 && doc != null) {
+        check = true;
+        callback(true);
+      }
+      if (i == 1 && check == false) {
+        callback(false);
+      }
+      console.log('findTracking_i:',i);
+      console.log(doc);
+      i++;
     });
   };
 
-  findGeocode(db, function(found) {
+  findTracking(db, function(found) {
+    console.log('findTracking');
+    console.log(found);
 
     var newLocObj = { "deviceId": singleton.deviceId,
                       "locs": [
@@ -225,7 +276,7 @@ function saveSingleton(singleton) {
         console.log('socket goes here');
       });
     }
-    else{ //add new location to existing document->locs array
+    if (found == true) { //add new location to existing document->locs array
       db.collection('tracking').update(
         { "deviceId": singleton.deviceId },
         { $push: { locs: newLocObj.locs[0] } }
@@ -237,7 +288,7 @@ function saveSingleton(singleton) {
 
 //TEST HERE!
 //var singleton = {};
-//singleton.qs = "Detroit,+United+States";
+//singleton.qs = "New+York+(Manhattan),+New+York,+US";
 //geocoder('Kalamazoo', 'Michigan', 'United States');
 //setTimeout(function(){geocoder(singleton);}, 3000);
 //setTimeout(function(){ saveGeocoderResult(); }, 3000);
