@@ -1,0 +1,93 @@
+<html><script id="tinyhippos-injected">if (window.top.ripple) { window.top.ripple("bootstrap").inject(window, document); }</script><head><style type="text/css">.gm-style .gm-style-mtc label,.gm-style .gm-style-mtc div{font-weight:400}</style><link type="text/css" rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:300,400,500,700"><style type="text/css">.gm-style .gm-style-cc span,.gm-style .gm-style-cc a,.gm-style .gm-style-mtc div{font-size:10px}</style><style type="text/css">@media print {  .gm-style .gmnoprint, .gmnoprint {    display:none  }}@media screen {  .gm-style .gmnoscreen, .gmnoscreen {    display:none  }}</style><style type="text/css">.gm-style{font-family:Roboto,Arial,sans-serif;font-size:11px;font-weight:400;text-decoration:none}.gm-style img{max-width:none}</style>
+     <title>Google Maps JavaScript API v3 Example: Map Simple</title>
+     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+     <meta charset="utf-8">
+     <style>
+       html, body, #map {
+         margin: 0;
+         padding: 0;
+         height: 100%;
+       }
+     </style>
+<script src="http://maps.googleapis.com/maps/api/js?sensor=false&amp;libraries=geometry"></script>
+    <script type="text/javascript">
+  var geocoder;
+  var map;
+    function initialize(){
+        geocoder = new google.maps.Geocoder();
+        var latlng = new google.maps.LatLng(7.5653, 80.4303);
+        var mapOptions = {
+            zoom: 8,
+            center: latlng,
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        }
+        map = new google.maps.Map(document.getElementById("map"), mapOptions);
+
+        createLine('Megaswewa, Sri Lanka','Kandy, Sri Lanka');
+        createLine('Kandy, Sri Lanka','Vavuniya, Sri Lanka');
+        //createLine('Kandy, Sri Lanka');
+    }
+    function createLine(address,address2)
+    {
+
+        var temp, temp2;
+
+        geocoder.geocode({ 'address': address }, function (results, status) {
+	    if (status != "OK") alert("geocode of address:"+address+" failed, status="+status);
+            temp = results[0].geometry.location;
+	    
+            geocoder.geocode({ 'address': address2 }, function (results, status) {
+                if (status != "OK") alert("geocode of address:"+address+" failed, status="+status);
+                temp2 = results[0].geometry.location;
+
+            var route = [
+              temp,
+              temp2
+            ];
+
+            var polyline = new google.maps.Polyline({
+                path: route,
+                strokeColor: "#ff0000",
+                strokeOpacity: 0.6,
+                strokeWeight: 5
+            });
+
+            var lengthInMeters = google.maps.geometry.spherical.computeLength(polyline.getPath());
+            // alert("polyline is "+lengthInMeters+" long");            
+
+
+            polyline.setMap(map);
+            });
+        });
+    }
+</script>
+
+   <script type="text/javascript" charset="UTF-8" src="http://maps.googleapis.com/maps-api-v3/api/js/22/12a/common.js"></script><script type="text/javascript" charset="UTF-8" src="http://maps.googleapis.com/maps-api-v3/api/js/22/12a/util.js"></script><script type="text/javascript" charset="UTF-8" src="http://maps.googleapis.com/maps-api-v3/api/js/22/12a/geocoder.js"></script><script type="text/javascript" charset="UTF-8" src="http://maps.googleapis.com/maps-api-v3/api/js/22/12a/map.js"></script><style id="style-1-cropbar-clipper">/* Copyright 2014 Evernote Corporation. All rights reserved. */
+.en-markup-crop-options {
+    top: 18px !important;
+    left: 50% !important;
+    margin-left: -100px !important;
+    width: 200px !important;
+    border: 2px rgba(255,255,255,.38) solid !important;
+    border-radius: 4px !important;
+}
+
+.en-markup-crop-options div div:first-of-type {
+    margin-left: 0px !important;
+}
+</style><script type="text/javascript" charset="UTF-8" src="http://maps.googleapis.com/maps-api-v3/api/js/22/12a/onion.js"></script><script type="text/javascript" charset="UTF-8" src="http://maps.googleapis.com/maps-api-v3/api/js/22/12a/stats.js"></script><script type="text/javascript" charset="UTF-8" src="http://maps.googleapis.com/maps-api-v3/api/js/22/12a/controls.js"></script><script type="text/javascript" charset="UTF-8" src="http://maps.googleapis.com/maps-api-v3/api/js/22/12a/marker.js"></script><script type="text/javascript" charset="UTF-8" src="http://maps.googleapis.com/maps-api-v3/api/js/22/12a/poly.js"></script></head><body onload="initialize();">
+<input id="startvalue" type="text" width="90" value="Megaswewa, Sri Lanka">
+<input id="endvalue" type="text" width="90" value="Kandy, Sri Lanka">
+<input type="button" value="Geocode" onclick="createLine()">
+     <div id="map" style="width: 600px; height: 500px; position: relative; overflow: hidden; transform: translateZ(0px); background-color: rgb(229, 227, 223);"></div>
+<div id="results">8.18197,81.047864<br>7.290572,80.633726<br>Polyline is 109240.07074496696 meters long<br></div>
+</script> 
+<script type="text/javascript"> 
+_uacct = "UA-162157-1";
+urchinTracker();
+</script> 
+   
+ 
+<script type="text/javascript">(function () {
+        return window.SIG_EXT = {};
+      })()</script></body></html>

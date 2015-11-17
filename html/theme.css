@@ -1,6 +1,11 @@
 body {
   padding-top: 70px;
   padding-bottom: 30px;
+  background-image: url("images/port-bkg.jpg");
+  background-position: 0px 0px;
+  background-width:100%;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
 }
 
 .theme-dropdown .dropdown-menu {
@@ -34,4 +39,45 @@ body {
     font-style: normal;
     font-weight: normal;
     src: url("fonts/auditype-normal-webfont.eot?iefix") format("eot"), url("fonts/auditype-normal-webfont.woff") format("woff"), url("fonts/auditype-normal-webfont.ttf") format("truetype"), url("fonts/auditype-normal-webfont.svg#webfontvlcd0Hwu") format("svg");
+}
+
+.light1{
+	left: -284px;
+	top: -14px;
+	position: relative;
+	-webkit-animation: flickerAnimation 4s infinite;
+   	-moz-animation: flickerAnimation 4s infinite;
+   	-o-animation: flickerAnimation 4s infinite;
+    animation: flickerAnimation 4s infinite;
+}
+
+.light2{
+	left: -269px;
+	top: -14px;
+	position: relative;
+	-webkit-animation: flickerAnimation 0.3s infinite;
+   	-moz-animation: flickerAnimation 0.3s infinite;
+   	-o-animation: flickerAnimation 0.3s infinite;
+    animation: flickerAnimation 0.3s infinite;
+}
+
+@keyframes flickerAnimation {
+  0%   { opacity:1; }
+  50%  { opacity:0; }
+  100% { opacity:1; }
+}
+@-o-keyframes flickerAnimation{
+  0%   { opacity:1; }
+  50%  { opacity:0; }
+  100% { opacity:1; }
+}
+@-moz-keyframes flickerAnimation{
+  0%   { opacity:1; }
+  50%  { opacity:0; }
+  100% { opacity:1; }
+}
+@-webkit-keyframes flickerAnimation{
+  0%   { opacity:1; }
+  50%  { opacity:0; }
+  100% { opacity:1; }
 }
