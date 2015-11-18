@@ -75,12 +75,12 @@ function findAddress(singleton){
       var city = singleton.city.replace(/ /g, '+');
       var country = singleton.country.replace(/ /g, '+');
 
-      if (!singleton.stateprov || singleton.stateprov != ''){
-        var stateprov = singleton.stateprov.replace(/ /g, '+');
-        var qs = city + ',+' + stateprov + ',+' + country;
+      if (!singleton.stateprov || singleton.stateprov == ''){
+        var qs = city + ',+' + country;
       }
       else{
-        var qs = city + ',+' + country;
+        var stateprov = singleton.stateprov.replace(/ /g, '+');
+        var qs = city + ',+' + stateprov + ',+' + country;
       }
       singleton.qs = qs;
 
