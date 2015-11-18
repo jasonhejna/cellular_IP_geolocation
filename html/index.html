@@ -81,9 +81,9 @@
         <div class="col-sm-4">
           <div class="panel panel-success">
             <div class="panel-heading">
-              <h3 class="panel-title">Estimated Delivery Date</h3>
+              <h3 id="estDelivDateTitle" class="panel-title">Estimated Delivery Date</h3>
             </div>
-            <div class="panel-body">
+            <div id="estDelivDate" class="panel-body">
               Tuesday Nov 17, 2015 - On Time
             </div>
           </div>
@@ -93,7 +93,7 @@
             <div class="panel-heading">
               <h3 class="panel-title">Current Location</h3>
             </div>
-            <div class="panel-body">
+            <div id="currLoc" class="panel-body">
               Toledo, Ohio, United States
             </div>
           </div>
@@ -103,7 +103,7 @@
             <div class="panel-heading">
               <h3 class="panel-title">Time in Location</h3>
             </div>
-            <div class="panel-body">
+            <div id="timeInLoc" class="panel-body">
               +49min
             </div>
           </div>
@@ -113,9 +113,9 @@
 
 
     <div class="col-sm-12" style="margin-top:43px;">
+    <percent id="progressType" style="left:87%;position:relative;top:49px;color:#FFF;">90%</percent>
       <div class="progress" style="height:80px;">
-        <percent style="left:-3%;position:relative;top:30px;color:#FFF;">90%</percent>
-        <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100" style="width: 90%"><span class="sr-only">90% Complete (success)</span></div>
+        <div id="progressBar" class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100" style="width: 90%"><span class="sr-only">90% Complete (success)</span></div>
       </div>
     </div>
 
@@ -127,30 +127,46 @@
           <table class="table table-striped">
             <thead>
               <tr>
-                <th>#</th>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>Username</th>
+                <th>Location</th>
+                <th>Time</th>
+                <th>Duration</th>
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>1</td>
-                <td>Mark</td>
-                <td>Otto</td>
-                <td>@mdo</td>
+              <tr id="detroit" style="display:none;">
+                <td>Detroit, Michigan, United States</td>
+                <td>Wed Nov 18 1:30pm</td>
+                <td>+1min</td>
               </tr>
               <tr>
-                <td>2</td>
-                <td>Jacob</td>
-                <td>Thornton</td>
-                <td>@fat</td>
+                <td>Toledo, Ohio, United States</td>
+                <td>Wed Nov 18 11:30am</td>
+                <td>+49min</td>
               </tr>
               <tr>
-                <td>3</td>
-                <td>Larry</td>
-                <td>the Bird</td>
-                <td>@twitter</td>
+                <td>Cleveland, Ohio, United States</td>
+                <td>Wed Nov 18 9:30am</td>
+                <td>+36min</td>
+              </tr>
+              <tr>
+                <td>Pittsburg, United States</td>
+                <td>Wed Nov 17 6:37pm</td>
+                <td>+47min</td>
+              </tr>
+              <tr>
+                <td>New York, New York, United States</td>
+                <td>Wed Nov 16 7:37pm</td>
+                <td>+1day 1hr 22min</td>
+              </tr>
+              <tr>
+                <td>Brussels, Belgium</td>
+                <td>Wed Nov 11 1:01pm</td>
+                <td>+13hr 11min</td>
+              </tr>
+              <tr>
+                <td>Ingolstadt, Germany</td>
+                <td>Wed Nov 10 3:37pm</td>
+                <td>+44min</td>
               </tr>
             </tbody>
         </table>
@@ -171,17 +187,10 @@
     <script src="assets/js/docs.min.js"></script>
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <script src="assets/js/ie10-viewport-bug-workaround.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
     <script type="text/javascript">
-  $.get( "http://localhost/cellular/getdata.json", function( singleton ) {
-    console.log( "Data Loaded: " + singleton );
-    createLine(singleton);
-    //initMap(singleton);
-    //locTable(singleton);
-  });
-
-  return;
-
   var map;
+  
   function initMap(singleton) {
     map = new google.maps.Map(document.getElementById('map'), {
       center: {lat: 44.5, lng: -35.861},
@@ -199,7 +208,7 @@
       });
     });
 
-    createLine(singleton);
+    //createLine(singleton);
   }
 
   
@@ -212,36 +221,100 @@
 
 
 function createLine(singleton) {
-  for (var i = 0; i < singleton.locs.length; i++) {
-    console.log(singleton.locs[i].latlng);
-    if ( i == 0 ){
 
-    }
+  function makeLine(loc, loc2){
+    var route = [
+      loc,
+      loc2
+    ];
+  
+    var polyline = new google.maps.Polyline({
+        path: route,
+        strokeColor: "#ff0000",
+        strokeOpacity: 0.6,
+        strokeWeight: 5
+    });
+  
+    polyline.setMap(map);
+
+  }
+
+  for (var i = 1; i < singleton.locs.length; i++) {
+    console.log(singleton.locs[i].latlng);
+
+    makeLine(singleton.locs[i-1].latlng, singleton.locs[i].latlng);
     //0 1
     //1 2
     //2 3
     //3 4
 
+  }  
+}
+
+function createNewLine(singleton) {
+
+  function makeLine(loc, loc2){
+    var route = [
+      loc,
+      loc2
+    ];
+  
+    var polyline = new google.maps.Polyline({
+        path: route,
+        strokeColor: "#ff0000",
+        strokeOpacity: 0.6,
+        strokeWeight: 5
+    });
+  
+    polyline.setMap(map);
+
   }
 
-  return;
-
-  var route = [
-    loc,
-    loc2
-  ];
-
-  var polyline = new google.maps.Polyline({
-      path: route,
-      strokeColor: "#ff0000",
-      strokeOpacity: 0.6,
-      strokeWeight: 5
-  });
-
-  polyline.setMap(map);
+  makeLine(singleton.locs[singleton.locs.length-2].latlng, singleton.locs[singleton.locs.length-1].latlng);
 
 }
 
-    </script>
+function addToUi(singleton) {
+
+  document.getElementById('estDelivDateTitle').innerText = 'Delivered';
+
+  document.getElementById('currLoc').innerText = singleton.locs[singleton.locs.length-1].qs.replace(/\+/g, ' ');
+
+  document.getElementById('timeInLoc').innerText = '+1min';
+
+  document.getElementById('progressType').style.left = '96%';
+
+  var percent;
+  for (var i = 0; i < 11; i++) {
+
+    percent = 90 + i;
+    setTimeout(function(){
+      document.getElementById('progressBar').style.width = percent + '%';
+      document.getElementById('progressType').innerText = percent + '%';
+    }, i*700);
+
+  }
+
+  createNewLine(singleton);
+
+  document.getElementById('detroit').style.display = '';
+}
+
+  $.get( "http://localhost/cellular/getdata.json", function( singleton ) {
+    console.log( "Data Loaded: " );
+    console.dir(singleton);
+    initMap(singleton);
+    createLine(singleton);
+    //addToUi(singleton);
+    //initMap(singleton);
+    //locTable(singleton);
+  });
+
+  var socket = io('http://localhost:8080');
+  socket.on('news', function (data) {
+    console.log(data);
+  });
+
+</script>
   </body>
 </html>
