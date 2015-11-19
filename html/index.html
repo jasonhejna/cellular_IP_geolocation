@@ -310,10 +310,13 @@ function addToUi(singleton) {
     //locTable(singleton);
   });
 
+  //setup sockets
   var socket = io('http://54.88.179.111:3330');
+
   socket.on('news', function (data) {
     console.log('socket',data);
   });
+
   socket.on('ping', function (data) {
     console.log('ping test:',data);
   });

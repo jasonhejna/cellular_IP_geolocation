@@ -296,7 +296,49 @@ function saveSingleton(singleton) {
 
     //socket
     console.log('socket emit');
-    mysocket.emit('news', newLocObj);
+    findTrackingDoc();
+    //mysocket.emit('news', newLocObj);
+
+  });
+}
+
+function findTrackingDoc() {
+
+    console.log('findTrackingDoc');
+
+    var tracking = function(db, callback) {
+    var i = 0;
+    var check = false;
+    var cursor = db.collection('tracking').find( { "deviceId": '0123456789' } ).limit(1);
+    cursor.each(function(err, doc) {
+      assert.equal(err, null);
+      if (i == 0 && doc == null){
+        callback(false);
+      }
+      if (i == 0 && doc != null) {
+        check = true;
+        callback(doc);
+      }
+      if (i == 1 && check == false) {
+        callback(false);
+      }
+      i++;
+    });
+  };
+
+  tracking(db, function(found) {
+
+    if (found == false) {
+      response.end('card not found');
+    }
+    else {
+      console.log(found);
+      var output = {};
+      output.deviceId = found.deviceId;
+      output.locs = found.locs;
+      console.dir(output);
+      mysocket.emit('news', output);
+    }
 
   });
 }
