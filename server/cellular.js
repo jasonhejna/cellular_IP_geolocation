@@ -314,9 +314,9 @@ server.listen(PORT, function(){
   //console.log("Server listening on: http://localhost:%s", PORT);
 });
 
-//setInterval(function() {
-//  mysocket.emit('news', { hello: 'you!' });
-//}, 16000);
+setInterval(function() {
+  mysocket.emit('news', { hello: 'you!' });
+}, 16000);
 
 process.stdin.resume();//so the program will not close instantly
 
