@@ -187,7 +187,7 @@
     <script src="assets/js/docs.min.js"></script>
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <script src="assets/js/ie10-viewport-bug-workaround.js"></script>
-    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://cdn.socket.io/socket.io-1.3.7.js"></script>
     <script type="text/javascript">
   var map;
   
@@ -312,7 +312,7 @@ function addToUi(singleton) {
 
   var socket = io('http://localhost:8080');
   socket.on('news', function (data) {
-    console.log(data);
+    console.log('socketio',data);
   });
 
 </script>

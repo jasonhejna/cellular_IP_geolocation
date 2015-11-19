@@ -4,6 +4,9 @@ var request = require("request");
 var MongoClient = require('mongodb').MongoClient;
 var assert = require('assert');
 
+var Server = require('socket.io');
+var io = new Server();
+
 var get_ip = require('ipware')().get_ip;
 //app.use(function(req, res, next) {
 //  var ip_info = get_ip(req);
@@ -195,7 +198,7 @@ function saveGeocoderResult(singleton) {
   };
 
   insertDocument(db, function() {
-
+    //TODO: report errors
   });
 
 }
@@ -289,13 +292,17 @@ function saveSingleton(singleton) {
   });
 }
 
+function socketEmit(){
+  
+  io.sockets.emit('an event sent to all connected clients');
+}
 
 //TEST HERE!
 //var singleton = {};
 //singleton.qs = "New+York+(Manhattan),+New+York,+US";
 //geocoder('Kalamazoo', 'Michigan', 'United States');
 //setTimeout(function(){geocoder(singleton);}, 3000);
-//setTimeout(function(){ saveGeocoderResult(); }, 3000);
+setTimeout(function(){ socketEmit(); }, 16000);
 
 
 //Create a server

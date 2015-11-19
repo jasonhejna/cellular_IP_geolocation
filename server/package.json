@@ -7,7 +7,8 @@
         "ipware": "*",
         "request": "*",
         "node-geocoder":"*",
-        "mongodb":"*"
+        "mongodb":"*",
+        "socket.io":"*"
   },
   "author": "Jason Hejna",
   "license": "BSD"
