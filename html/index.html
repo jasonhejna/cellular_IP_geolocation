@@ -300,7 +300,7 @@ function addToUi(singleton) {
   document.getElementById('detroit').style.display = '';
 }
 
-  $.get( "http://localhost/cellular/getdata.json", function( singleton ) {
+  $.get( "http://54.88.179.111:8081/?api_key=1a2b3c4d5c6e&card=0123456789", function( singleton ) {
     console.log( "Data Loaded: " );
     console.dir(singleton);
     initMap(singleton);
@@ -310,9 +310,10 @@ function addToUi(singleton) {
     //locTable(singleton);
   });
 
-  var socket = io('http://localhost:8080');
+  var socket = io('http://54.88.179.111:3330');
   socket.on('news', function (data) {
-    console.log('socketio',data);
+    console.log('socket',data);
+    socket.emit('my other event', { my: 'data' });
   });
 
 </script>

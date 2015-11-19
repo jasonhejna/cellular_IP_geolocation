@@ -4,9 +4,7 @@ var request = require("request");
 var MongoClient = require('mongodb').MongoClient;
 var assert = require('assert');
 
-
-var Server = require('socket.io');
-var io = new Server();
+var io = require('socket.io')(3330);
 
 var get_ip = require('ipware')().get_ip;
 //app.use(function(req, res, next) {
@@ -293,24 +291,12 @@ function saveSingleton(singleton) {
   });
 }
 
-function socketEmit(){
-  
-  io.sockets.emit('an event sent to all connected clients');
-}
-
 //TEST HERE!
 //var singleton = {};
 //singleton.qs = "New+York+(Manhattan),+New+York,+US";
 //geocoder('Kalamazoo', 'Michigan', 'United States');
 //setTimeout(function(){geocoder(singleton);}, 3000);
 //setTimeout(function(){ socketEmit(); }, 16000);
-
-io.on('connection', function (socket) {
-  socket.emit('news', { hello: 'world' });
-  socket.on('my other event', function (data) {
-    console.log(data);
-  });
-});
 
 //Create a server
 var server = http.createServer(handleRequest);
@@ -320,6 +306,16 @@ server.listen(PORT, function(){
   //Callback triggered when server is successfully listening. Hurray!
   //console.log("Server listening on: http://localhost:%s", PORT);
 });
+
+//Create socket server
+var mysocket;
+io.on('connection', function (socket) {
+  mysocket = socket;
+});
+
+setInterval(function() {
+  mysocket.emit('news', { hello: 'you!' });
+}, 16000);
 
 process.stdin.resume();//so the program will not close instantly
 
