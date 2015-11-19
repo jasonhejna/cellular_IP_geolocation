@@ -4,6 +4,7 @@ var request = require("request");
 var MongoClient = require('mongodb').MongoClient;
 var assert = require('assert');
 
+
 var Server = require('socket.io');
 var io = new Server();
 
@@ -302,8 +303,14 @@ function socketEmit(){
 //singleton.qs = "New+York+(Manhattan),+New+York,+US";
 //geocoder('Kalamazoo', 'Michigan', 'United States');
 //setTimeout(function(){geocoder(singleton);}, 3000);
-setTimeout(function(){ socketEmit(); }, 16000);
+//setTimeout(function(){ socketEmit(); }, 16000);
 
+io.on('connection', function (socket) {
+  socket.emit('news', { hello: 'world' });
+  socket.on('my other event', function (data) {
+    console.log(data);
+  });
+});
 
 //Create a server
 var server = http.createServer(handleRequest);
