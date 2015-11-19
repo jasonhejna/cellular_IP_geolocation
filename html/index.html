@@ -299,8 +299,8 @@ function addToUi(singleton) {
 
   document.getElementById('detroit').style.display = '';
 }
-
-  $.get( "http://54.88.179.111:8081/?api_key=1a2b3c4d5c6e&card=0123456789", function( singleton ) {
+  //http://54.88.179.111:8081/?api_key=1a2b3c4d5c6e&card=0123456789
+  $.get( "testdata.json", function( singleton ) {
     console.log( "Data Loaded: " );
     console.dir(singleton);
     initMap(singleton);
