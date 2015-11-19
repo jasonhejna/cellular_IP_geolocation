@@ -315,6 +315,7 @@ function addToUi(singleton) {
 
   socket.on('news', function (data) {
     console.log('socket',data);
+    addToUi(data);
   });
 
   socket.on('ping', function (data) {
