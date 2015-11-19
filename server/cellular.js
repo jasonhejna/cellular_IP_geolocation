@@ -279,7 +279,8 @@ function saveSingleton(singleton) {
 
       insertDocument(db, function() {
         //socket
-        console.log('socket goes here');
+        console.log('socket emit');
+        mysocket.emit('news', newLocObj);
       });
     }
     if (found == true) { //add new location to existing document->locs array
@@ -313,9 +314,9 @@ io.on('connection', function (socket) {
   mysocket = socket;
 });
 
-setInterval(function() {
-  mysocket.emit('news', { hello: 'you!' });
-}, 16000);
+//setInterval(function() {
+//  mysocket.emit('news', { hello: 'you!' });
+//}, 16000);
 
 process.stdin.resume();//so the program will not close instantly
 

@@ -313,7 +313,6 @@ function addToUi(singleton) {
   var socket = io('http://54.88.179.111:3330');
   socket.on('news', function (data) {
     console.log('socket',data);
-    socket.emit('my other event', { my: 'data' });
   });
 
 </script>
