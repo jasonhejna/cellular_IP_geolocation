@@ -286,7 +286,8 @@ function saveSingleton(singleton) {
       insertDocument(db, function() {
         //socket
         console.log('socket emit');
-        mysocket.emit('news', JSON.stringify(newLocObj));
+        //mysocket.emit('news', JSON.stringify(newLocObj));
+        mysocket.emit('news', { hello: 'me!' });
       });
     }
     if (found == true) { //add new location to existing document->locs array
