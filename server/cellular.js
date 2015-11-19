@@ -293,11 +293,10 @@ function saveSingleton(singleton) {
         { $push: { locs: newLocObj.locs[0] } }
       )
     }
-    
+
     //socket
     console.log('socket emit');
-    //mysocket.emit('news', newLocObj);
-    mysocket.emit('news', { hello: 'me!' });
+    mysocket.emit('news', newLocObj);
 
   });
 }
@@ -319,7 +318,7 @@ server.listen(PORT, function(){
 });
 
 setInterval(function() {
-  mysocket.emit('news', { hello: 'you!' });
+  mysocket.emit('ping', 'pinged successfully');
 }, 16000);
 
 process.stdin.resume();//so the program will not close instantly
