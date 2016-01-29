@@ -35,7 +35,9 @@ io.on('connection', function (socket) {
 
 
 function handleRequest(request, response){
-  
+
+  console.log('request recieved');
+
   request.shouldKeepAlive = false;
   response.end('ok');
 
